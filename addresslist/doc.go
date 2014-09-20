@@ -3,5 +3,5 @@
 // @license     https://github.com/chanxuehong/wechatcorp/blob/master/LICENSE
 // @authors     chanxuehong(chanxuehong@gmail.com)
 
-// 定义常规情况下微信服务器推送过来的消息数据结构
-package request
+// 定义通讯录操作相关数据结构
+package addresslist

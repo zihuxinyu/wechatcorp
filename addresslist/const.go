@@ -3,21 +3,16 @@
 // @license     https://github.com/chanxuehong/wechatcorp/blob/master/LICENSE
 // @authors     chanxuehong(chanxuehong@gmail.com)
 
-package common
+package addresslist
 
 const (
-	NewsArticleCountLimit = 10
+	USERINFO_GENDER_MALE   = 0 // 男性
+	USERINFO_GENDER_FEMALE = 1 // 女性
 
-	NewsArticleShowCoverPicTrue  = 1
-	NewsArticleShowCoverPicFalse = 0
-)
+	USERINFO_ENABLE_TRUE  = 1 // 启用成员
+	USERINFO_ENABLE_FALSE = 0 // 禁用成员
 
-const (
-	MSG_TYPE_TEXT   = "text"
-	MSG_TYPE_IMAGE  = "image"
-	MSG_TYPE_VOICE  = "voice"
-	MSG_TYPE_VIDEO  = "video"
-	MSG_TYPE_FILE   = "file"
-	MSG_TYPE_NEWS   = "news"
-	MSG_TYPE_MPNEWS = "mpnews"
+	USERINFO_STATUS_SUBSCRIBED   = 1 // 已关注
+	USERINFO_STATUS_BLOCKED      = 2 // 已冻结
+	USERINFO_STATUS_NOSUBSCRIBED = 3 // 未关注
 )

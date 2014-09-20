@@ -3,21 +3,11 @@
 // @license     https://github.com/chanxuehong/wechatcorp/blob/master/LICENSE
 // @authors     chanxuehong(chanxuehong@gmail.com)
 
-package common
+package media
 
 const (
-	NewsArticleCountLimit = 10
-
-	NewsArticleShowCoverPicTrue  = 1
-	NewsArticleShowCoverPicFalse = 0
-)
-
-const (
-	MSG_TYPE_TEXT   = "text"
-	MSG_TYPE_IMAGE  = "image"
-	MSG_TYPE_VOICE  = "voice"
-	MSG_TYPE_VIDEO  = "video"
-	MSG_TYPE_FILE   = "file"
-	MSG_TYPE_NEWS   = "news"
-	MSG_TYPE_MPNEWS = "mpnews"
+	MEDIA_TYPE_IMAGE = "image"
+	MEDIA_TYPE_VOICE = "voice"
+	MEDIA_TYPE_VIDEO = "video"
+	MEDIA_TYPE_FILE  = "file"
 )

@@ -1,4 +1,4 @@
-// @description wechat-corp 是腾讯微信公众平台企业号 api 的 golang 语言封装
+// @description wechatcorp 是腾讯微信公众平台 企业号 api 的 golang 语言封装
 // @link        https://github.com/chanxuehong/wechatcorp for the canonical source repository
 // @license     https://github.com/chanxuehong/wechatcorp/blob/master/LICENSE
 // @authors     chanxuehong(chanxuehong@gmail.com)
@@ -8,9 +8,9 @@ package common
 type CommonHead struct {
 	ToUser     []string `json:"-"`
 	ToUserStr  string   `json:"touser,omitempty"` // 非必须; UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送
-	ToParty    string   `json:"-"`
+	ToParty    []string `json:"-"`
 	ToPartyStr string   `json:"toparty,omitempty"` // 非必须; PartyID列表，多个接受者用‘|’分隔。当touser为@all时忽略本参数
-	ToTag      string   `json:"-"`
+	ToTag      []string `json:"-"`
 	ToTagStr   string   `json:"totag,omitempty"` // 非必须; TagID列表，多个接受者用‘|’分隔。当touser为@all时忽略本参数
 
 	MsgType string `json:"msgtype"`               // 必须; 消息类型
