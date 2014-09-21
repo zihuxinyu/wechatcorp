@@ -5,6 +5,7 @@
 
 package request
 
+// 关注事件
 type SubscribeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -12,6 +13,15 @@ type SubscribeEvent struct {
 	Event string `xml:"Event" json:"Event"` // 事件类型，subscribe(订阅)
 }
 
+func (req *Request) SubscribeEvent() (event *SubscribeEvent) {
+	event = &SubscribeEvent{
+		CommonHead: req.CommonHead,
+		Event:      req.Event,
+	}
+	return
+}
+
+// 取消关注事件
 type UnsubscribeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -19,6 +29,15 @@ type UnsubscribeEvent struct {
 	Event string `xml:"Event" json:"Event"` // 事件类型，unsubscribe(取消订阅)
 }
 
+func (req *Request) UnsubscribeEvent() (event *UnsubscribeEvent) {
+	event = &UnsubscribeEvent{
+		CommonHead: req.CommonHead,
+		Event:      req.Event,
+	}
+	return
+}
+
+// 上报地理位置事件
 type LocationEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -29,18 +48,13 @@ type LocationEvent struct {
 	Precision float64 `xml:"Precision" json:"Precision"` // 地理位置精度
 }
 
-type MenuClickEvent struct {
-	XMLName struct{} `xml:"xml" json:"-"`
-	CommonHead
-
-	Event    string `xml:"Event"    json:"Event"`    // 事件类型，CLICK
-	EventKey string `xml:"EventKey" json:"EventKey"` // 事件KEY值，与自定义菜单接口中KEY值对应
-}
-
-type MenuViewEvent struct {
-	XMLName struct{} `xml:"xml" json:"-"`
-	CommonHead
-
-	Event    string `xml:"Event"    json:"Event"`    // 事件类型，VIEW
-	EventKey string `xml:"EventKey" json:"EventKey"` // 事件KEY值，设置的跳转URL
+func (req *Request) LocationEvent() (event *LocationEvent) {
+	event = &LocationEvent{
+		CommonHead: req.CommonHead,
+		Event:      req.Event,
+		Latitude:   req.Latitude,
+		Longitude:  req.Longitude,
+		Precision:  req.Precision,
+	}
+	return
 }

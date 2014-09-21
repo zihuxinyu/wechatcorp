@@ -5,6 +5,7 @@
 
 package request
 
+// 文本消息
 type Text struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -13,6 +14,16 @@ type Text struct {
 	Content string `xml:"Content" json:"Content"` // 文本消息内容
 }
 
+func (req *Request) Text() (text *Text) {
+	text = &Text{
+		CommonHead: req.CommonHead,
+		MsgId:      req.MsgId,
+		Content:    req.Content,
+	}
+	return
+}
+
+// 图片消息
 type Image struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -22,6 +33,17 @@ type Image struct {
 	PicURL  string `xml:"PicUrl"  json:"PicUrl"`  // 图片链接
 }
 
+func (req *Request) Image() (image *Image) {
+	image = &Image{
+		CommonHead: req.CommonHead,
+		MsgId:      req.MsgId,
+		MediaId:    req.MediaId,
+		PicURL:     req.PicURL,
+	}
+	return
+}
+
+// 语音消息
 type Voice struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -32,9 +54,21 @@ type Voice struct {
 
 	// 语音识别结果，UTF8编码，
 	// NOTE: 需要开通语音识别功能，否则该字段为空，即使开通了语音识别该字段还是有可能为空
-	// Recognition string `xml:"Recognition" json:"Recognition"`
+	//Recognition string `xml:"Recognition" json:"Recognition"`
 }
 
+func (req *Request) Voice() (voice *Voice) {
+	voice = &Voice{
+		CommonHead: req.CommonHead,
+		MsgId:      req.MsgId,
+		MediaId:    req.MediaId,
+		Format:     req.Format,
+		//Recognition: req.Recognition,
+	}
+	return
+}
+
+// 视频消息
 type Video struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -44,6 +78,17 @@ type Video struct {
 	ThumbMediaId string `xml:"ThumbMediaId" json:"ThumbMediaId"` // 视频消息缩略图的媒体id，可以调用多媒体文件下载接口拉取数据。
 }
 
+func (req *Request) Video() (video *Video) {
+	video = &Video{
+		CommonHead:   req.CommonHead,
+		MsgId:        req.MsgId,
+		MediaId:      req.MediaId,
+		ThumbMediaId: req.ThumbMediaId,
+	}
+	return
+}
+
+// 地理位置消息
 type Location struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -53,4 +98,16 @@ type Location struct {
 	LocationY float64 `xml:"Location_Y" json:"Location_Y"` // 地理位置经度
 	Scale     int     `xml:"Scale"      json:"Scale"`      // 地图缩放大小
 	Label     string  `xml:"Label"      json:"Label"`      // 地理位置信息
+}
+
+func (req *Request) Location() (location *Location) {
+	location = &Location{
+		CommonHead: req.CommonHead,
+		MsgId:      req.MsgId,
+		LocationX:  req.LocationX,
+		LocationY:  req.LocationY,
+		Scale:      req.Scale,
+		Label:      req.Label,
+	}
+	return
 }

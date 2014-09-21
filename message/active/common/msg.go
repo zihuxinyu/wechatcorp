@@ -6,16 +6,13 @@
 package common
 
 type CommonHead struct {
-	ToUser     []string `json:"-"`
-	ToUserStr  string   `json:"touser,omitempty"` // 非必须; UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送
-	ToParty    []string `json:"-"`
-	ToPartyStr string   `json:"toparty,omitempty"` // 非必须; PartyID列表，多个接受者用‘|’分隔。当touser为@all时忽略本参数
-	ToTag      []string `json:"-"`
-	ToTagStr   string   `json:"totag,omitempty"` // 非必须; TagID列表，多个接受者用‘|’分隔。当touser为@all时忽略本参数
+	ToUser  string `json:"touser,omitempty"`  // 非必须; UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送
+	ToParty string `json:"toparty,omitempty"` // 非必须; PartyID列表，多个接受者用‘|’分隔。当touser为@all时忽略本参数
+	ToTag   string `json:"totag,omitempty"`   // 非必须; TagID列表，多个接受者用‘|’分隔。当touser为@all时忽略本参数
 
-	MsgType string `json:"msgtype"`               // 必须; 消息类型
-	AgentId string `json:"agentid"`               // 必须; 企业应用ID
-	Safe    string `json:"safe,string,omitempty"` // 非必须; 表示是否是保密消息，0表示否，1表示是，默认0
+	MsgType string `json:"msgtype"`        // 必须; 消息类型
+	AgentId int64  `json:"agentid"`        // 必须; 企业应用ID
+	Safe    int    `json:"safe,omitempty"` // 非必须; 表示是否是保密消息，0表示否，1表示是，默认0
 }
 
 type Text struct {

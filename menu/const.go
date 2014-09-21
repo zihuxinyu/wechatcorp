@@ -11,15 +11,16 @@ const (
 )
 
 const (
-	MenuButtonLenLimit    = 16 // 菜单标题不超过16个字节
-	SubMenuButtonLenLimit = 40 // 子菜单标题不超过40个字节
+	MenuButtonNameLenLimit    = 16 // 菜单标题不超过16个字节
+	SubMenuButtonNameLenLimit = 40 // 子菜单标题不超过40个字节
 )
+
 const (
 	ButtonKeyLenLimit = 128 // 菜单KEY值不能超过128字节
 	ButtonURLLenLimit = 256 // 网页链接不能超过256字节
 )
 
 const (
-	BUTTON_TYPE_CLICK = "click"
-	BUTTON_TYPE_VIEW  = "view"
+	BUTTON_TYPE_CLICK = "click" // 点击推事件
+	BUTTON_TYPE_VIEW  = "view"  // 跳转URL
 )

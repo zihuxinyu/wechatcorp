@@ -21,3 +21,8 @@ const (
 	MSG_TYPE_NEWS   = "news"
 	MSG_TYPE_MPNEWS = "mpnews"
 )
+
+const (
+	MSG_SAFE_TRUE  = 1
+	MSG_SAFE_FALSE = 0
+)

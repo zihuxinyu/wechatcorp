@@ -129,10 +129,10 @@ type NewsArticle struct {
 	URL         string `xml:"Url,omitempty"         json:"Url,omitempty"`         // 点击图文消息跳转链接
 }
 
-func (this *NewsArticle) Init(title, description, url, picURL string) {
+func (this *NewsArticle) Init(title, description, URL, picURL string) {
 	this.Title = title
 	this.Description = description
-	this.URL = url
+	this.URL = URL
 	this.PicURL = picURL
 }
 
@@ -158,7 +158,6 @@ func NewNews(to, from string, articles []NewsArticle) (news *News) {
 	}
 	news.Articles = articles
 	news.ArticleCount = len(articles)
-
 	return
 }
 

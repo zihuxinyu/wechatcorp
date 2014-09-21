@@ -17,10 +17,9 @@ const (
 
 const (
 	// 微信服务器推送过来的事件类型
-	EVENT_TYPE_SUBSCRIBE   = "subscribe"
-	EVENT_TYPE_UNSUBSCRIBE = "unsubscribe"
-	EVENT_TYPE_SCAN        = "SCAN"
-	EVENT_TYPE_LOCATION    = "LOCATION"
-	EVENT_TYPE_CLICK       = "CLICK"
-	EVENT_TYPE_VIEW        = "VIEW"
+	EVENT_TYPE_SUBSCRIBE   = "subscribe"   // 关注
+	EVENT_TYPE_UNSUBSCRIBE = "unsubscribe" // 取消关注
+	EVENT_TYPE_CLICK       = "CLICK"       // 点击菜单拉取消息时的事件推送
+	EVENT_TYPE_VIEW        = "VIEW"        // 点击菜单跳转链接时的事件推送
+	EVENT_TYPE_LOCATION    = "LOCATION"    // 上报地理位置事件
 )

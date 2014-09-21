@@ -5,32 +5,20 @@
 
 package addresslist
 
-type UserInfoForCreate struct {
-	Id         string  `json:"userid"`               // 必须;  员工UserID。对应管理端的帐号，企业内必须唯一
-	Name       string  `json:"name"`                 // 必须;  成员名称。长度为0~64个字符
+// 创建成员的参数
+type UserCreateParameters struct {
+	UserId     string  `json:"userid"`               // 必须;  员工UserID。对应管理端的帐号，企业内必须唯一
+	Name       string  `json:"name"`                 // 必须;  成员名称。长度为1~64个字符
 	Department []int64 `json:"department,omitempty"` // 非必须; 成员所属部门id列表。注意，每个部门的直属员工上限为1000个
 	Position   string  `json:"position,omitempty"`   // 非必须; 职位信息。长度为0~64个字符
-	Mobile     string  `json:"mobile,omitempty"`     // 非必须; 手机号码。企业内必须唯一，更新后的成员mobile/weixinid/email三者不能同时为空
+	Mobile     string  `json:"mobile,omitempty"`     // 非必须; 手机号码。企业内必须唯一，mobile/weixinid/email三者不能同时为空
 	Gender     int     `json:"gender,omitempty"`     // 非必须; 性别。gender=0表示男，=1表示女。默认gender=0
-	Tel        string  `json:"tel,omitempty"`        // 非必须; 办公电话。长度为0~64个字符。必须企业内唯一
+	Tel        string  `json:"tel,omitempty"`        // 非必须; 办公电话。长度为0~64个字符
 	Email      string  `json:"email,omitempty"`      // 非必须; 邮箱。长度为0~64个字符。企业内必须唯一
 	WeixinId   string  `json:"weixinid,omitempty"`   // 非必须; 微信号。企业内必须唯一
 }
 
-// NOTE: 如果非必须的字段未指定，则不更新该字段之前的设置值
-type UserInfoForUpdate struct {
-	Id         string  `json:"userid"`               // 必须;  员工UserID。对应管理端的帐号，企业内必须唯一
-	Name       string  `json:"name,omitempty"`       // 非必须; 成员名称。长度为0~64个字符
-	Department []int64 `json:"department,omitempty"` // 非必须; 成员所属部门id列表。注意，每个部门的直属员工上限为1000个
-	Position   string  `json:"position,omitempty"`   // 非必须; 职位信息。长度为0~64个字符
-	Mobile     string  `json:"mobile,omitempty"`     // 非必须; 手机号码。企业内必须唯一，更新后的成员mobile/weixinid/email三者不能同时为空
-	Gender     int     `json:"gender,omitempty"`     // 非必须; 性别。gender=0表示男，=1表示女。默认gender=0
-	Tel        string  `json:"tel,omitempty"`        // 非必须; 办公电话。长度为0~64个字符。必须企业内唯一
-	Email      string  `json:"email,omitempty"`      // 非必须; 邮箱。长度为0~64个字符。企业内必须唯一
-	WeixinId   string  `json:"weixinid,omitempty"`   // 非必须; 微信号。企业内必须唯一
-	Enable     int     `json:"enable,omitempty"`     // 非必须; 启用/禁用成员。1表示启用成员，0表示禁用成员
-}
-
+// 获取成员得到的信息
 type UserInfo struct {
 	Id         string  `json:"userid"`     // 员工UserID
 	Name       string  `json:"name"`       // 成员名称
