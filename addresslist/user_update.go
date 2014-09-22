@@ -97,10 +97,14 @@ func (para UserUpdateParameters) DelWeixinId() {
 	delete(para, "weixinid")
 }
 
-// 非必须; 启用/禁用成员。1表示启用成员，0表示禁用成员
+// 非必须; 启用/禁用成员
 
-func (para UserUpdateParameters) SetEnable(enable int) {
-	para["enable"] = enable
+func (para UserUpdateParameters) SetEnable(enable bool) {
+	if enable {
+		para["enable"] = 1
+	} else {
+		para["enable"] = 0
+	}
 }
 func (para UserUpdateParameters) DelEnable() {
 	delete(para, "enable")
