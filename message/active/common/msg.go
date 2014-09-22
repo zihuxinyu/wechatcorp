@@ -5,6 +5,18 @@
 
 package common
 
+import (
+	"errors"
+	"fmt"
+)
+
+// 发送消息返回的数据结构
+type Result struct {
+	InvalidUser  string `json:"invaliduser"`
+	InvalidParty string `json:"invalidparty"`
+	InvalidTag   string `json:"invalidtag"`
+}
+
 type CommonHead struct {
 	ToUser  string `json:"touser,omitempty"`  // 非必须; UserID列表（消息接收者，多个接收者用‘|’分隔）。特殊情况：指定为@all，则向关注该企业应用的全部成员发送
 	ToParty string `json:"toparty,omitempty"` // 非必须; PartyID列表，多个接受者用‘|’分隔。当touser为@all时忽略本参数
@@ -72,6 +84,20 @@ type News struct {
 	} `json:"news"`
 }
 
+// 检查 News 是否有效，有效返回 nil，否则返回错误信息
+func (this *News) CheckValid() (err error) {
+	n := len(this.News.Articles)
+	if n <= 0 {
+		err = errors.New("没有有效的图文消息")
+		return
+	}
+	if n > NewsArticleCountLimit {
+		err = fmt.Errorf("图文消息的文章个数不能超过 %d, 现在为 %d", NewsArticleCountLimit, n)
+		return
+	}
+	return
+}
+
 type MPNewsArticle struct {
 	ThumbMediaId     string `json:"thumb_media_id"`                  // 图文消息缩略图的media_id, 可以在上传多媒体文件接口中获得。此处thumb_media_id即上传接口返回的media_id
 	Title            string `json:"title"`                           // 图文消息的标题
@@ -88,4 +114,18 @@ type MPNews struct {
 	MPNews struct {
 		Articles []MPNewsArticle `json:"articles,omitempty"` // 多条图文消息信息, 默认第一个item为大图, 注意, 如果图文数超过10, 则将会无响应
 	} `json:"mpnews"`
+}
+
+// 检查 MPNews 是否有效，有效返回 nil，否则返回错误信息
+func (this *MPNews) CheckValid() (err error) {
+	n := len(this.MPNews.Articles)
+	if n <= 0 {
+		err = errors.New("没有有效的图文消息")
+		return
+	}
+	if n > NewsArticleCountLimit {
+		err = fmt.Errorf("图文消息的文章个数不能超过 %d, 现在为 %d", NewsArticleCountLimit, n)
+		return
+	}
+	return
 }

@@ -5,20 +5,7 @@
 
 package client
 
-import (
-	"fmt"
-)
-
-const (
-	errCodeOK      = 0
-	errCodeTimeout = 42001
-)
-
-type Error struct {
-	ErrCode int    `json:"errcode"`
-	ErrMsg  string `json:"errmsg"`
-}
-
-func (e *Error) Error() string {
-	return fmt.Sprintf("errcode: %d, errmsg: %s", e.ErrCode, e.ErrMsg)
+// https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=ACCESS_TOKEN
+func _MsgSendURL(accesstoken string) string {
+	return "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + accesstoken
 }
