@@ -6,6 +6,7 @@
 package server
 
 import (
+	"crypto/sha1"
 	"crypto/subtle"
 	"encoding/base64"
 	"encoding/xml"
@@ -52,6 +53,12 @@ func (handler AgentHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 		signature := urlValues.Get("msg_signature")
 		if signature == "" {
 			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("msg_signature is empty"))
+			return
+		}
+
+		const signatureLen = sha1.Size * 2
+		if len(signature) != signatureLen {
+			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("check signature failed"))
 			return
 		}
 
@@ -150,6 +157,12 @@ func (handler AgentHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 		signature := urlValues.Get("msg_signature")
 		if signature == "" {
 			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("msg_signature is empty"))
+			return
+		}
+
+		const signatureLen = sha1.Size * 2
+		if len(signature) != signatureLen {
+			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("check signature failed"))
 			return
 		}
 
