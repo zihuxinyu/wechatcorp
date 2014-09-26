@@ -9,7 +9,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	wechatjson "github.com/chanxuehong/wechat/json"
+	wechatjson "github.com/chanxuehong/wechatcorp/json"
 	"net/http"
 )
 
