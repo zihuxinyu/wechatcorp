@@ -15,7 +15,7 @@ type CustomAgentMsgHandler struct {
 }
 
 // 自定义文本消息处理函数, 覆盖默认的实现
-func (handler *CustomAgentMsgHandler) TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
+func (handler *CustomAgentMsgHandler) TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp int64, nonce string, random []byte) {
 	// 示例代码, 把用户发送过来的文本原样的回复过去
 
 	w.Header().Set("Content-Type", "application/xml; charset=utf-8") // 可选

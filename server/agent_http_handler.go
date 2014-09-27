@@ -75,19 +75,13 @@ func (handler AgentHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 			return
 		}
 
-		nonceStr := urlValues.Get("nonce")
-		if nonceStr == "" {
+		nonce := urlValues.Get("nonce")
+		if nonce == "" {
 			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("nonce is empty"))
 			return
 		}
 
-		nonce, err := strconv.ParseInt(nonceStr, 10, 64)
-		if err != nil {
-			handler.AgentMsgHandler.InvalidRequestHandler(w, r, err)
-			return
-		}
-
-		signaturex := handler.AgentMsgHandler.Signature(timestampStr, nonceStr, RequestHttpBody.EncryptMsg)
+		signaturex := handler.AgentMsgHandler.Signature(timestampStr, nonce, RequestHttpBody.EncryptMsg)
 		// 采用 subtle.ConstantTimeCompare 是防止 计时攻击!
 		if subtle.ConstantTimeCompare([]byte(signature), []byte(signaturex)) != 1 {
 			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("check signature failed"))

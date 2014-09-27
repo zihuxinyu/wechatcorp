@@ -15,7 +15,7 @@ import (
 )
 
 // 把 text 回复消息 msg 写入 writer w
-func (handler *DefaultAgentMsgHandler) WriteText(w io.Writer, msg *response.Text, timestamp, nonce int64, random []byte) (err error) {
+func (handler *DefaultAgentMsgHandler) WriteText(w io.Writer, msg *response.Text, timestamp int64, nonce string, random []byte) (err error) {
 	if w == nil {
 		return errors.New("w == nil")
 	}
@@ -26,7 +26,7 @@ func (handler *DefaultAgentMsgHandler) WriteText(w io.Writer, msg *response.Text
 }
 
 // 把 image 回复消息 msg 写入 writer w
-func (handler *DefaultAgentMsgHandler) WriteImage(w io.Writer, msg *response.Image, timestamp, nonce int64, random []byte) (err error) {
+func (handler *DefaultAgentMsgHandler) WriteImage(w io.Writer, msg *response.Image, timestamp int64, nonce string, random []byte) (err error) {
 	if w == nil {
 		return errors.New("w == nil")
 	}
@@ -37,7 +37,7 @@ func (handler *DefaultAgentMsgHandler) WriteImage(w io.Writer, msg *response.Ima
 }
 
 // 把 voice 回复消息 msg 写入 writer w
-func (handler *DefaultAgentMsgHandler) WriteVoice(w io.Writer, msg *response.Voice, timestamp, nonce int64, random []byte) (err error) {
+func (handler *DefaultAgentMsgHandler) WriteVoice(w io.Writer, msg *response.Voice, timestamp int64, nonce string, random []byte) (err error) {
 	if w == nil {
 		return errors.New("w == nil")
 	}
@@ -48,7 +48,7 @@ func (handler *DefaultAgentMsgHandler) WriteVoice(w io.Writer, msg *response.Voi
 }
 
 // 把 video 回复消息 msg 写入 writer w
-func (handler *DefaultAgentMsgHandler) WriteVideo(w io.Writer, msg *response.Video, timestamp, nonce int64, random []byte) (err error) {
+func (handler *DefaultAgentMsgHandler) WriteVideo(w io.Writer, msg *response.Video, timestamp int64, nonce string, random []byte) (err error) {
 	if w == nil {
 		return errors.New("w == nil")
 	}
@@ -59,7 +59,7 @@ func (handler *DefaultAgentMsgHandler) WriteVideo(w io.Writer, msg *response.Vid
 }
 
 // 把 news 回复消息 msg 写入 writer w
-func (handler *DefaultAgentMsgHandler) WriteNews(w io.Writer, msg *response.News, timestamp, nonce int64, random []byte) (err error) {
+func (handler *DefaultAgentMsgHandler) WriteNews(w io.Writer, msg *response.News, timestamp int64, nonce string, random []byte) (err error) {
 	if w == nil {
 		return errors.New("w == nil")
 	}
@@ -72,7 +72,7 @@ func (handler *DefaultAgentMsgHandler) WriteNews(w io.Writer, msg *response.News
 	return handler.writeResponse(w, msg, timestamp, nonce, random)
 }
 
-func (handler *DefaultAgentMsgHandler) writeResponse(w io.Writer, msg interface{}, timestamp, nonce int64, random []byte) (err error) {
+func (handler *DefaultAgentMsgHandler) writeResponse(w io.Writer, msg interface{}, timestamp int64, nonce string, random []byte) (err error) {
 	msgBytes, err := xml.Marshal(msg)
 	if err != nil {
 		return
@@ -87,8 +87,7 @@ func (handler *DefaultAgentMsgHandler) writeResponse(w io.Writer, msg interface{
 	ResponseHttpBody.Nonce = nonce
 
 	timestampStr := strconv.FormatInt(timestamp, 10)
-	nonceStr := strconv.FormatInt(nonce, 10)
-	ResponseHttpBody.Signature = string(handler.Signature(timestampStr, nonceStr, base64EncryptMsg))
+	ResponseHttpBody.Signature = string(handler.Signature(timestampStr, nonce, base64EncryptMsg))
 
 	return xml.NewEncoder(w).Encode(&ResponseHttpBody)
 }

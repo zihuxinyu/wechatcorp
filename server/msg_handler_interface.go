@@ -36,27 +36,27 @@ type AgentMsgHandler interface {
 	//  timestamp 是请求中的时间戳
 	//  nonce     是请求中的随机数
 	//  random    是请求中的消息体加密的 random
-	UnknownMsgHandler(w http.ResponseWriter, r *http.Request, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
+	UnknownMsgHandler(w http.ResponseWriter, r *http.Request, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
 
 	// 消息处理函数
 	//  rawXMLMsg 是解密后的明文 xml 消息体
 	//  timestamp 是请求中的时间戳
 	//  nonce     是请求中的随机数
 	//  random    是请求中的消息体加密的 random
-	TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	ImageMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Image, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	VoiceMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Voice, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	VideoMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Video, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	LocationMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Location, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
+	TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	ImageMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Image, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	VoiceMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Voice, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	VideoMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Video, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	LocationMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Location, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
 
 	// 事件处理函数
 	//  rawXMLMsg 是解密后的明文 xml 消息体
 	//  timestamp 是请求中的时间戳
 	//  nonce     是请求中的随机数
 	//  random    是请求中的消息体加密的 random
-	SubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.SubscribeEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	UnsubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.UnsubscribeEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	LocationEventHandler(w http.ResponseWriter, r *http.Request, event *request.LocationEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	MenuClickEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuClickEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
-	MenuViewEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuViewEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte)
+	SubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.SubscribeEvent, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	UnsubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.UnsubscribeEvent, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	LocationEventHandler(w http.ResponseWriter, r *http.Request, event *request.LocationEvent, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	MenuClickEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuClickEvent, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
+	MenuViewEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuViewEvent, rawXMLMsg []byte, timestamp int64, nonce string, random []byte)
 }
