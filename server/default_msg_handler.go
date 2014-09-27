@@ -41,25 +41,25 @@ func (handler *DefaultAgentMsgHandler) GetAgentId() string {
 
 func (handler *DefaultAgentMsgHandler) InvalidRequestHandler(w http.ResponseWriter, r *http.Request, err error) {
 }
-func (handler *DefaultAgentMsgHandler) UnknownMsgHandler(w http.ResponseWriter, r *http.Request, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) UnknownMsgHandler(w http.ResponseWriter, r *http.Request, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) ImageMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Image, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) ImageMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Image, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) VoiceMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Voice, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) VoiceMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Voice, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) VideoMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Video, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) VideoMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Video, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) LocationMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Location, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) LocationMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Location, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) SubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.SubscribeEvent, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) SubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.SubscribeEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) UnsubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.UnsubscribeEvent, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) UnsubscribeEventHandler(w http.ResponseWriter, r *http.Request, event *request.UnsubscribeEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) LocationEventHandler(w http.ResponseWriter, r *http.Request, event *request.LocationEvent, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) LocationEventHandler(w http.ResponseWriter, r *http.Request, event *request.LocationEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) MenuClickEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuClickEvent, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) MenuClickEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuClickEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }
-func (handler *DefaultAgentMsgHandler) MenuViewEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuViewEvent, rawXMLMsg []byte, timestamp, nonce string, random []byte) {
+func (handler *DefaultAgentMsgHandler) MenuViewEventHandler(w http.ResponseWriter, r *http.Request, event *request.MenuViewEvent, rawXMLMsg []byte, timestamp, nonce int64, random []byte) {
 }

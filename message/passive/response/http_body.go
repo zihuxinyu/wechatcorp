@@ -14,6 +14,6 @@ package response
 type ResponseHttpBody struct {
 	EncryptMsg string `xml:"Encrypt"` // EncryptMsg 为经过加密的密文
 	Signature  string `xml:"MsgSignature"`
-	TimeStamp  string `xml:"TimeStamp"`
-	Nonce      string `xml:"Nonce"`
+	TimeStamp  int64  `xml:"TimeStamp"`
+	Nonce      int64  `xml:"Nonce"`
 }

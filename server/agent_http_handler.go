@@ -14,6 +14,7 @@ import (
 	"github.com/chanxuehong/wechatcorp/message/passive/request"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 // net/http.Handler 的实现
@@ -62,19 +63,31 @@ func (handler AgentHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request
 			return
 		}
 
-		timestamp := urlValues.Get("timestamp")
-		if timestamp == "" {
+		timestampStr := urlValues.Get("timestamp")
+		if timestampStr == "" {
 			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("timestamp is empty"))
 			return
 		}
 
-		nonce := urlValues.Get("nonce")
-		if nonce == "" {
+		timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
+		if err != nil {
+			handler.AgentMsgHandler.InvalidRequestHandler(w, r, err)
+			return
+		}
+
+		nonceStr := urlValues.Get("nonce")
+		if nonceStr == "" {
 			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("nonce is empty"))
 			return
 		}
 
-		signaturex := handler.AgentMsgHandler.Signature(timestamp, nonce, RequestHttpBody.EncryptMsg)
+		nonce, err := strconv.ParseInt(nonceStr, 10, 64)
+		if err != nil {
+			handler.AgentMsgHandler.InvalidRequestHandler(w, r, err)
+			return
+		}
+
+		signaturex := handler.AgentMsgHandler.Signature(timestampStr, nonceStr, RequestHttpBody.EncryptMsg)
 		// 采用 subtle.ConstantTimeCompare 是防止 计时攻击!
 		if subtle.ConstantTimeCompare([]byte(signature), []byte(signaturex)) != 1 {
 			handler.AgentMsgHandler.InvalidRequestHandler(w, r, errors.New("check signature failed"))
