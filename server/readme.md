@@ -10,33 +10,38 @@ import (
 	"time"
 )
 
-// 自己实现一个 server.AgentMsgHandler
+// 实现 server.AgentMsgHandler
 type CustomAgentMsgHandler struct {
-	server.DefaultAgentMsgHandler // 可选! 提供了默认实现
+	server.DefaultAgentMsgHandler // 可选, 不是必须!!! 提供了默认实现
 }
 
-// 自定义文本消息处理函数, 覆盖默认的实现
+// 文本消息处理函数, 覆盖默认的实现
 func (handler *CustomAgentMsgHandler) TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp int64, nonce string, random []byte) {
-	// 示例代码
-	w.Header().Set("Content-Type", "application/xml; charset=utf-8")                           // 可选
-	resp := response.NewText(msg.FromUserName, msg.ToUserName, msg.Content, time.Now().Unix()) // 时间戳也可以用传入的参数 timestamp
+	// TODO: 示例代码
+
+	w.Header().Set("Content-Type", "application/xml; charset=utf-8") // 可选
+
+	// 时间戳也可以用传入的参数 timestamp, 即微信服务器请求的 timestamp
+	resp := response.NewText(msg.FromUserName, msg.ToUserName, msg.Content, time.Now().Unix())
 
 	// timestamp, nonce, random 参数可以直接用传入的参数, 也可以自己生成!!!
 	if err := handler.WriteText(w, resp, timestamp, nonce, random); err != nil {
-		// TODO: 增加错误处理代码
+		// TODO: 错误处理代码
 	}
 }
 
+// 自定义错误请求处理函数
 func CustomInvalidRequestHandlerFunc(w http.ResponseWriter, r *http.Request, err error) {
+	// TODO: 这里只是简单的做下 log
 	log.Println(err)
 }
 
 func init() {
-	// TODO: 获取必要数据的代码
-
 	var AgentMsgHandler CustomAgentMsgHandler
 	AgentMsgHandler.DefaultAgentMsgHandler.Init("CorpId", "AgentId", "Token", []byte("AESKey"))
 
+	// 这里创建的是非并发安全的 HttpHandler, 所有的配置工作都要在注册到 URL 之前完成,
+	// 如果想动态增加/删除 AgentMsgHandler, 请使用 server.CSHttpHandler
 	var HttpHandler server.NCSHttpHandler
 	HttpHandler.SetInvalidRequestHandler(server.InvalidRequestHandlerFunc(CustomInvalidRequestHandlerFunc))
 	HttpHandler.SetAgentMsgHandler("CorpId", "AgentId", &AgentMsgHandler)

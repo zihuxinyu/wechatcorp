@@ -34,9 +34,9 @@ type NCSHttpHandler struct {
 func (this *NCSHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandler) {
 	if handler == nil {
 		this.invalidRequestHandler = InvalidRequestHandlerFunc(DefaultInvalidRequestHandlerFunc)
-		return
+	} else {
+		this.invalidRequestHandler = handler
 	}
-	this.invalidRequestHandler = handler
 }
 
 // 添加或设置 CorpId, AgentId 对应的 AgentMsgHandler, 如果 handler == nil 则不做任何操作
@@ -45,11 +45,11 @@ func (this *NCSHttpHandler) SetAgentMsgHandler(CorpId, AgentId string, handler A
 		return
 	}
 
+	handlerKey := agentMsgHandlerMapKey{CorpId, AgentId}
+
 	if this.agentMsgHandlerMap == nil {
 		this.agentMsgHandlerMap = make(map[agentMsgHandlerMapKey]AgentMsgHandler)
 	}
-
-	handlerKey := agentMsgHandlerMapKey{CorpId, AgentId}
 	this.agentMsgHandlerMap[handlerKey] = handler
 }
 
@@ -69,7 +69,6 @@ func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if invalidRequestHandler == nil {
 		invalidRequestHandler = InvalidRequestHandlerFunc(DefaultInvalidRequestHandlerFunc)
 	}
-
 	if len(this.agentMsgHandlerMap) == 0 {
 		invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("no AgentMsgHandler"))
 		return
