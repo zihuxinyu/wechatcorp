@@ -10,26 +10,17 @@ import (
 	"net/http"
 )
 
-// 应用的消息处理接口
+// 企业号单个应用的消息处理接口
 type AgentMsgHandler interface {
-	// 获取应用的企业号 id
-	GetCorpId() string
-
-	// 获取应用的 id
-	GetAgentId() string
-
 	// 生成签名
 	Signature(timestamp, nonce, EncryptMsg string) (signature string)
 
-	// 加密.
-	// random 的长度为 16, 你也可以不使用参数指定的值 random, 可以自己生成!
+	// 加密
+	//  NOTE: 具体实现的时候可以不使用参数传递的 random, 可以自己生成 random
 	EncryptMsg(random, rawXMLMsg []byte) (EncryptMsg []byte)
 
-	// 解密, 要验证 corp id 的正确性
+	// 解密, 要验证 CorpId 的正确性
 	DecryptMsg(EncryptMsg []byte) (random, rawXMLMsg []byte, err error)
-
-	// 非法的请求处理方法, err 是出错信息
-	InvalidRequestHandler(w http.ResponseWriter, r *http.Request, err error)
 
 	// 未知类型的消息处理方法
 	//  rawXMLMsg 是解密后的明文 xml 消息体

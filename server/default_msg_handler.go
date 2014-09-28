@@ -32,15 +32,6 @@ func (handler *DefaultAgentMsgHandler) Init(CorpId, AgentId, Token string, AESKe
 	handler.CipherIV = AESKey[:16]
 }
 
-func (handler *DefaultAgentMsgHandler) GetCorpId() string {
-	return handler.CorpId
-}
-func (handler *DefaultAgentMsgHandler) GetAgentId() string {
-	return handler.AgentId
-}
-
-func (handler *DefaultAgentMsgHandler) InvalidRequestHandler(w http.ResponseWriter, r *http.Request, err error) {
-}
 func (handler *DefaultAgentMsgHandler) UnknownMsgHandler(w http.ResponseWriter, r *http.Request, rawXMLMsg []byte, timestamp int64, nonce string, random []byte) {
 }
 func (handler *DefaultAgentMsgHandler) TextMsgHandler(w http.ResponseWriter, r *http.Request, msg *request.Text, rawXMLMsg []byte, timestamp int64, nonce string, random []byte) {

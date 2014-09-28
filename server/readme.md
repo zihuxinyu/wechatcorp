@@ -31,12 +31,12 @@ func init() {
 	var AgentMsgHandler CustomAgentMsgHandler
 	AgentMsgHandler.Init("CorpId", "AgentId", "Token", []byte("AESKey"))
 
-	var AgentHttpHandler server.AgentHttpHandler
-	AgentHttpHandler.AgentMsgHandler = &AgentMsgHandler
+	var HttpHandler server.NCSHttpHandler
+	HttpHandler.SetAgentMsgHandler("CorpId", "AgentId", &AgentMsgHandler)
 
 	// 注册这个 handler 到回调 URL 上
 	// 比如你在公众平台后台注册的回调地址是 http://abc.xxx.com/weixin，那么可以这样注册
-	http.Handle("/weixin", AgentHttpHandler)
+	http.Handle("/weixin", &HttpHandler)
 }
 
 func main() {
