@@ -24,13 +24,18 @@ type agentMsgHandlerMapKey struct {
 }
 
 // net/http.Handler 的实现.
-// 非并发安全, 要求注册到 URL 之前全部设置好, 注册之后不能再更改设置了.
+//  NOTE: 非并发安全, 要求注册到 URL 之前全部设置好, 注册之后不能再更改设置了.
 type NCSHttpHandler struct {
 	invalidRequestHandler InvalidRequestHandler
 	agentMsgHandlerMap    map[agentMsgHandlerMapKey]AgentMsgHandler
 }
 
+// 设置 InvalidRequestHandler, 如果 handler == nil 则使用默认的 DefaultInvalidRequestHandlerFunc
 func (this *NCSHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandler) {
+	if handler == nil {
+		this.invalidRequestHandler = InvalidRequestHandlerFunc(DefaultInvalidRequestHandlerFunc)
+		return
+	}
 	this.invalidRequestHandler = handler
 }
 
@@ -66,7 +71,7 @@ func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(this.agentMsgHandlerMap) == 0 {
-		invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("agentMsgHandlerMap is empty"))
+		invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("no AgentMsgHandler"))
 		return
 	}
 
@@ -78,9 +83,8 @@ func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		agentMsgHandlerKey := agentMsgHandlerMapKey{requestHttpBody.CorpId, requestHttpBody.AgentId}
-		agentMsgHandler := this.agentMsgHandlerMap[agentMsgHandlerKey]
-
+		handlerKey := agentMsgHandlerMapKey{requestHttpBody.CorpId, requestHttpBody.AgentId}
+		agentMsgHandler := this.agentMsgHandlerMap[handlerKey]
 		if agentMsgHandler == nil {
 			invalidRequestHandler.ServeInvalidRequest(w, r, fmt.Errorf("Not found AgentMsgHandler for CorpId: %s, AgentId: %s", requestHttpBody.CorpId, requestHttpBody.AgentId))
 			return
@@ -117,7 +121,7 @@ func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		timestamp, err := strconv.ParseInt(timestampStr, 10, 64)
 		if err != nil {
-			invalidRequestHandler.ServeInvalidRequest(w, r, fmt.Errorf("can not parse timestamp: %s to int64, error: %s", timestampStr, err.Error()))
+			invalidRequestHandler.ServeInvalidRequest(w, r, fmt.Errorf("can not parse timestamp(==%q) to int64, error: %s", timestampStr, err.Error()))
 			return
 		}
 
@@ -236,16 +240,17 @@ func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		EncryptMsgBytes, err := base64.StdEncoding.DecodeString(EncryptMsg)
+		if err != nil {
+			invalidRequestHandler.ServeInvalidRequest(w, r, err)
+			return
+		}
+
+		// 一个一个的 AgentMsgHandler 尝试
 		for _, agentMsgHandler := range this.agentMsgHandlerMap {
 			signaturex := agentMsgHandler.Signature(timestamp, nonce, EncryptMsg)
 			if subtle.ConstantTimeCompare([]byte(signature), []byte(signaturex)) != 1 {
 				continue
-			}
-
-			EncryptMsgBytes, err := base64.StdEncoding.DecodeString(EncryptMsg)
-			if err != nil {
-				invalidRequestHandler.ServeInvalidRequest(w, r, err)
-				return
 			}
 
 			_, echostr, err := agentMsgHandler.DecryptMsg(EncryptMsgBytes)
@@ -257,6 +262,7 @@ func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// 所有的 AgentMsgHandler 都不能验证
 		invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("check signature failed"))
 		return
 	}
