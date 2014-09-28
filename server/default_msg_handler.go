@@ -22,7 +22,7 @@ type DefaultAgentMsgHandler struct {
 
 func (handler *DefaultAgentMsgHandler) Init(CorpId, AgentId, Token string, AESKey []byte) {
 	if len(AESKey) != 32 {
-		panic("the length of AESKey must be equal 32")
+		panic("the length of AESKey must be equal to 32")
 	}
 
 	handler.CorpId = CorpId

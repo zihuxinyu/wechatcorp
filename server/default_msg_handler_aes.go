@@ -15,7 +15,7 @@ import (
 // 把整数 n 格式化成 4 字节的网络字节序
 func encodeNetworkBytesOrder(n int, orderBytes []byte) {
 	if len(orderBytes) != 4 {
-		panic("the length of orderBytes must be equal 4")
+		panic("the length of orderBytes must be equal to 4")
 	}
 	orderBytes[0] = byte(n >> 24)
 	orderBytes[1] = byte(n >> 16)
@@ -26,7 +26,7 @@ func encodeNetworkBytesOrder(n int, orderBytes []byte) {
 // 从 4 字节的网络字节序里解析出整数
 func decodeNetworkBytesOrder(orderBytes []byte) (n int) {
 	if len(orderBytes) != 4 {
-		panic("the length of orderBytes must be equal 4")
+		panic("the length of orderBytes must be equal to 4")
 	}
 	n = int(orderBytes[0])<<24 |
 		int(orderBytes[1])<<16 |
