@@ -25,6 +25,8 @@ type SingleHttpHandler struct {
 	agentMsgHandler       AgentMsgHandler
 }
 
+// 创建一个新的 SingleHttpHandler
+//  如果 invalidRequestHandler == nil 则使用默认的 DefaultInvalidRequestHandlerFunc
 func NewSingleHttpHandler(invalidRequestHandler InvalidRequestHandler,
 	agentMsgHandler AgentMsgHandler) *SingleHttpHandler {
 
@@ -47,12 +49,6 @@ func (this *SingleHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 
 	switch r.Method {
 	case "POST": // 处理从微信服务器推送过来的消息(事件) ==============================
-		var requestHttpBody request.RequestHttpBody
-		if err := xml.NewDecoder(r.Body).Decode(&requestHttpBody); err != nil {
-			invalidRequestHandler.ServeInvalidRequest(w, r, err)
-			return
-		}
-
 		if r.URL == nil {
 			invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("r.URL == nil"))
 			return
@@ -91,6 +87,12 @@ func (this *SingleHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 		nonce := urlValues.Get("nonce")
 		if nonce == "" {
 			invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("nonce is empty"))
+			return
+		}
+
+		var requestHttpBody request.RequestHttpBody
+		if err := xml.NewDecoder(r.Body).Decode(&requestHttpBody); err != nil {
+			invalidRequestHandler.ServeInvalidRequest(w, r, err)
 			return
 		}
 
@@ -203,15 +205,15 @@ func (this *SingleHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request)
 			return
 		}
 
-		EncryptMsgBytes, err := base64.StdEncoding.DecodeString(EncryptMsg)
-		if err != nil {
-			invalidRequestHandler.ServeInvalidRequest(w, r, err)
-			return
-		}
-
 		signaturex := agentMsgHandler.Signature(timestamp, nonce, EncryptMsg)
 		if subtle.ConstantTimeCompare([]byte(signature), []byte(signaturex)) != 1 {
 			invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("check signature failed"))
+			return
+		}
+
+		EncryptMsgBytes, err := base64.StdEncoding.DecodeString(EncryptMsg)
+		if err != nil {
+			invalidRequestHandler.ServeInvalidRequest(w, r, err)
 			return
 		}
 

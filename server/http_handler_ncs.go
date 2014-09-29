@@ -263,6 +263,5 @@ func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		// 所有的 AgentMsgHandler 都不能验证
 		invalidRequestHandler.ServeInvalidRequest(w, r, errors.New("check signature failed"))
-		return
 	}
 }

@@ -1,3 +1,9 @@
+## 简介
+
+封装微信服务器推送到回调 URL 的消息(事件)处理 Handler.
+
+## 示例
+
 ```golang
 package main
 
@@ -38,10 +44,12 @@ func CustomInvalidRequestHandlerFunc(w http.ResponseWriter, r *http.Request, err
 
 func init() {
 	var AgentMsgHandler CustomAgentMsgHandler
+	// 填入正确的参数
 	AgentMsgHandler.DefaultAgentMsgHandler.Init("CorpId", "AgentId", "Token", []byte("AESKey"))
 
 	// 这里创建的是非并发安全的 HttpHandler, 所有的配置工作都要在注册到 URL 之前完成,
 	// 如果想动态增加/删除 AgentMsgHandler, 请使用 server.CSHttpHandler
+	// 如果你只有一个企业号应用, 也可以直接使用 server.SingleHttpHandler
 	var HttpHandler server.NCSHttpHandler
 	HttpHandler.SetInvalidRequestHandler(server.InvalidRequestHandlerFunc(CustomInvalidRequestHandlerFunc))
 	HttpHandler.SetAgentMsgHandler("CorpId", "AgentId", &AgentMsgHandler)
