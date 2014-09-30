@@ -21,14 +21,14 @@ import (
 
 // net/http.Handler 的实现.
 //  NOTE: 并发安全, 可以根据需要动态添加/删除 AgentMsgHandler
-type CSHttpHandler struct {
+type CSMultiHttpHandler struct {
 	rwmutex               sync.RWMutex
 	invalidRequestHandler InvalidRequestHandler
 	agentMsgHandlerMap    map[agentMsgHandlerMapKey]AgentMsgHandler
 }
 
 // 设置 InvalidRequestHandler, 如果 handler == nil 则使用默认的 DefaultInvalidRequestHandlerFunc
-func (this *CSHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandler) {
+func (this *CSMultiHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandler) {
 	if handler == nil {
 		this.rwmutex.Lock()
 		this.invalidRequestHandler = InvalidRequestHandlerFunc(DefaultInvalidRequestHandlerFunc)
@@ -41,7 +41,7 @@ func (this *CSHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandle
 }
 
 // 添加或设置 CorpId, AgentId 对应的 AgentMsgHandler, 如果 handler == nil 则不做任何操作
-func (this *CSHttpHandler) SetAgentMsgHandler(CorpId, AgentId string, handler AgentMsgHandler) {
+func (this *CSMultiHttpHandler) SetAgentMsgHandler(CorpId, AgentId string, handler AgentMsgHandler) {
 	if handler == nil {
 		return
 	}
@@ -57,7 +57,7 @@ func (this *CSHttpHandler) SetAgentMsgHandler(CorpId, AgentId string, handler Ag
 }
 
 // 删除 CorpId, AgentId 对应的 AgentMsgHandler
-func (this *CSHttpHandler) DeleteAgentMsgHandler(CorpId, AgentId string) {
+func (this *CSMultiHttpHandler) DeleteAgentMsgHandler(CorpId, AgentId string) {
 	handlerKey := agentMsgHandlerMapKey{CorpId, AgentId}
 
 	this.rwmutex.Lock()
@@ -66,13 +66,13 @@ func (this *CSHttpHandler) DeleteAgentMsgHandler(CorpId, AgentId string) {
 }
 
 // 清除所有的 AgentMsgHandler
-func (this *CSHttpHandler) ClearAgentMsgHandler() {
+func (this *CSMultiHttpHandler) ClearAgentMsgHandler() {
 	this.rwmutex.Lock()
 	this.agentMsgHandlerMap = nil
 	this.rwmutex.Unlock()
 }
 
-func (this *CSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (this *CSMultiHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	this.rwmutex.RLock()
 	defer this.rwmutex.RUnlock()
 

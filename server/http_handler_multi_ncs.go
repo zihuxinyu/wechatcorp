@@ -25,13 +25,13 @@ type agentMsgHandlerMapKey struct {
 
 // net/http.Handler 的实现.
 //  NOTE: 非并发安全, 要求注册到 URL 之前全部设置好, 注册之后不能再更改设置了.
-type NCSHttpHandler struct {
+type NCSmultiHttpHandler struct {
 	invalidRequestHandler InvalidRequestHandler
 	agentMsgHandlerMap    map[agentMsgHandlerMapKey]AgentMsgHandler
 }
 
 // 设置 InvalidRequestHandler, 如果 handler == nil 则使用默认的 DefaultInvalidRequestHandlerFunc
-func (this *NCSHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandler) {
+func (this *NCSmultiHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandler) {
 	if handler == nil {
 		this.invalidRequestHandler = InvalidRequestHandlerFunc(DefaultInvalidRequestHandlerFunc)
 	} else {
@@ -40,7 +40,7 @@ func (this *NCSHttpHandler) SetInvalidRequestHandler(handler InvalidRequestHandl
 }
 
 // 添加或设置 CorpId, AgentId 对应的 AgentMsgHandler, 如果 handler == nil 则不做任何操作
-func (this *NCSHttpHandler) SetAgentMsgHandler(CorpId, AgentId string, handler AgentMsgHandler) {
+func (this *NCSmultiHttpHandler) SetAgentMsgHandler(CorpId, AgentId string, handler AgentMsgHandler) {
 	if handler == nil {
 		return
 	}
@@ -54,17 +54,17 @@ func (this *NCSHttpHandler) SetAgentMsgHandler(CorpId, AgentId string, handler A
 }
 
 // 删除 CorpId, AgentId 对应的 AgentMsgHandler
-func (this *NCSHttpHandler) DeleteAgentMsgHandler(CorpId, AgentId string) {
+func (this *NCSmultiHttpHandler) DeleteAgentMsgHandler(CorpId, AgentId string) {
 	handlerKey := agentMsgHandlerMapKey{CorpId, AgentId}
 	delete(this.agentMsgHandlerMap, handlerKey)
 }
 
 // 清除所有的 AgentMsgHandler
-func (this *NCSHttpHandler) ClearAgentMsgHandler() {
+func (this *NCSmultiHttpHandler) ClearAgentMsgHandler() {
 	this.agentMsgHandlerMap = nil
 }
 
-func (this *NCSHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (this *NCSmultiHttpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	invalidRequestHandler := this.invalidRequestHandler
 	if invalidRequestHandler == nil {
 		invalidRequestHandler = InvalidRequestHandlerFunc(DefaultInvalidRequestHandlerFunc)
