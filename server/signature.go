@@ -11,11 +11,11 @@ import (
 	"sort"
 )
 
-func (handler *DefaultAgentMsgHandler) Signature(timestamp, nonce, EncryptMsg string) (signature string) {
-	strArray := sort.StringSlice{timestamp, nonce, EncryptMsg, handler.Token}
+func signature(token, timestamp, nonce, encryptMsg string) (signature string) {
+	strArray := sort.StringSlice{token, timestamp, nonce, encryptMsg}
 	strArray.Sort()
 
-	n := len(timestamp) + len(nonce) + len(EncryptMsg) + len(handler.Token)
+	n := len(token) + len(timestamp) + len(nonce) + len(encryptMsg)
 	buf := make([]byte, 0, n)
 
 	buf = append(buf, strArray[0]...)

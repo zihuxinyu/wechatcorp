@@ -35,16 +35,16 @@ func decodeNetworkBytesOrder(orderBytes []byte) (n int) {
 	return
 }
 
-func (handler *DefaultAgentMsgHandler) EncryptMsg(random, rawXMLMsg []byte) (EncryptMsg []byte) {
-	buf := make([]byte, 20+len(rawXMLMsg)+len(handler.CorpId)+aes.BlockSize)
+func encryptMsg(random, rawXMLMsg []byte, CorpId string, AESKey []byte) (encryptMsg []byte) {
+	buf := make([]byte, 20+len(rawXMLMsg)+len(CorpId)+aes.BlockSize)
 	plain := buf[:20]
 	pad := buf[len(buf)-aes.BlockSize:]
 
 	// 拼接
-	copy(plain, random) // 使用参数 random, 不自己生成
+	copy(plain, random)
 	encodeNetworkBytesOrder(len(rawXMLMsg), plain[16:20])
 	plain = append(plain, rawXMLMsg...)
-	plain = append(plain, handler.CorpId...)
+	plain = append(plain, CorpId...)
 
 	// 补位
 	amountToPad := aes.BlockSize - len(plain)%aes.BlockSize
@@ -55,36 +55,36 @@ func (handler *DefaultAgentMsgHandler) EncryptMsg(random, rawXMLMsg []byte) (Enc
 	plain = append(plain, pad...)
 
 	// 加密
-	block, err := aes.NewCipher(handler.AESKey)
+	block, err := aes.NewCipher(AESKey)
 	if err != nil {
 		panic(err)
 	}
-	mode := cipher.NewCBCEncrypter(block, handler.CipherIV)
+	mode := cipher.NewCBCEncrypter(block, AESKey[:16])
 	mode.CryptBlocks(plain, plain)
 
-	EncryptMsg = plain
+	encryptMsg = plain
 	return
 }
 
-func (handler *DefaultAgentMsgHandler) DecryptMsg(EncryptMsg []byte) (random, rawXMLMsg []byte, err error) {
+func decryptMsg(encryptMsg []byte, CorpId string, AESKey []byte) (random, rawXMLMsg []byte, err error) {
 	// 解密
-	if len(EncryptMsg) < aes.BlockSize {
-		err = errors.New("EncryptMsg too short")
+	if len(encryptMsg) < aes.BlockSize {
+		err = errors.New("encryptMsg too short")
 		return
 	}
-	if len(EncryptMsg)%aes.BlockSize != 0 {
-		err = errors.New("EncryptMsg is not a multiple of the block size")
+	if len(encryptMsg)%aes.BlockSize != 0 {
+		err = errors.New("encryptMsg is not a multiple of the block size")
 		return
 	}
 
-	block, err := aes.NewCipher(handler.AESKey)
+	block, err := aes.NewCipher(AESKey)
 	if err != nil {
 		panic(err)
 	}
-	mode := cipher.NewCBCDecrypter(block, handler.CipherIV)
-	mode.CryptBlocks(EncryptMsg, EncryptMsg)
+	mode := cipher.NewCBCDecrypter(block, AESKey[:16])
 
-	plain := EncryptMsg
+	plain := make([]byte, len(encryptMsg))
+	mode.CryptBlocks(plain, encryptMsg)
 
 	// 去除补位
 	amountToPad := int(plain[len(plain)-1])
@@ -110,8 +110,8 @@ func (handler *DefaultAgentMsgHandler) DecryptMsg(EncryptMsg []byte) (random, ra
 		return
 	}
 
-	CorpId := string(plain[msgEnd:])
-	if CorpId != handler.CorpId {
+	CorpIdHave := string(plain[msgEnd:])
+	if CorpIdHave != CorpId { // crypto/subtle.ConstantTimeCompare ???
 		err = errors.New("CorpId mismatch")
 		return
 	}
