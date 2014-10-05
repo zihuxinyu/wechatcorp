@@ -18,7 +18,7 @@ type TokenCache interface {
 	Token() (token string, err error)
 
 	// 添加或者重置 token
-	SetToken(token string) (err error)
+	PutToken(token string) (err error)
 }
 
 var _ TokenCache = new(DefaultTokenCache)
@@ -40,7 +40,7 @@ func (this *DefaultTokenCache) Token() (token string, err error) {
 	return
 }
 
-func (this *DefaultTokenCache) SetToken(token string) (err error) {
+func (this *DefaultTokenCache) PutToken(token string) (err error) {
 	if len(token) == 0 {
 		return errors.New("token is empty")
 	}

@@ -27,7 +27,7 @@ func (c *Client) TokenRefresh() (token string, err error) {
 	if token, err = c.getToken(); err != nil {
 		return
 	}
-	if err = c.tokenCache.SetToken(token); err != nil {
+	if err = c.tokenCache.PutToken(token); err != nil {
 		return
 	}
 	return
