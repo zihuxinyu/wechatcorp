@@ -72,7 +72,10 @@ func (this *AgentFrontend) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			invalidRequestHandler.ServeInvalidRequest(w, r, err)
 			return
 		}
-		if wantAgentId := agent.GetAgentId(); requestHttpBody.AgentId != wantAgentId {
+
+		wantAgentId := agent.GetAgentId()
+
+		if requestHttpBody.AgentId != wantAgentId && requestHttpBody.AgentId != 0 {
 			err = fmt.Errorf("the message RequestHttpBody's AgentId mismatch, have: %d, want: %d", requestHttpBody.AgentId, wantAgentId)
 			invalidRequestHandler.ServeInvalidRequest(w, r, err)
 			return
@@ -94,6 +97,26 @@ func (this *AgentFrontend) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err := xml.Unmarshal(rawXMLMsg, &msgReq); err != nil {
 			invalidRequestHandler.ServeInvalidRequest(w, r, err)
 			return
+		}
+
+		if requestHttpBody.AgentId != msgReq.AgentId {
+			err = fmt.Errorf("the RequestHttpBody's AgentId(==%d) mismatch the Request's AgengId(==%d)", requestHttpBody.AgentId, msgReq.AgentId)
+			invalidRequestHandler.ServeInvalidRequest(w, r, err)
+			return
+		}
+
+		// 此时要么 msgReq.AgentId == wantAgentId, 要么 msgReq.AgentId == 0
+
+		if msgReq.AgentId == 0 {
+			// 订阅/取消订阅 整个企业号
+			if msgReq.MsgType == request.MSG_TYPE_EVENT &&
+				(msgReq.Event == request.EVENT_TYPE_SUBSCRIBE || msgReq.Event == request.EVENT_TYPE_UNSUBSCRIBE) {
+				// do nothing
+			} else {
+				err = fmt.Errorf("the message Request's AgentId mismatch, have: %d, want: %d", msgReq.AgentId, wantAgentId)
+				invalidRequestHandler.ServeInvalidRequest(w, r, err)
+				return
+			}
 		}
 
 		msgDispatch(w, r, &msgReq, rawXMLMsg, timestamp, nonce, random, agent)

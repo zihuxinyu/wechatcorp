@@ -10,7 +10,7 @@ type CommonHead struct {
 	FromUserName string `xml:"FromUserName" json:"FromUserName"` // 员工UserID
 	CreateTime   int64  `xml:"CreateTime"   json:"CreateTime"`   // 消息创建时间（整型）, unixtime
 	MsgType      string `xml:"MsgType"      json:"MsgType"`      // 消息类型
-	AgentID      int64  `xml:"AgentID"      json:"AgentID"`      // 企业应用的id，可在应用的设置页面获取；如果id为0，则表示是整个企业号的关注/取消关注事件
+	AgentId      int64  `xml:"AgentID"      json:"AgentID"`      // 企业应用的id，可在应用的设置页面获取；如果id为0，则表示是整个企业号的关注/取消关注事件
 }
 
 // 微信服务器推送到开发者 URL 的所有已知的消息类型的组合体
