@@ -12,10 +12,10 @@ import (
 
 // 企业号应用对外暴露的接口
 type Agent interface {
-	GetCorpId() string  // 获取应用所属的企业号Id
-	GetAgentId() string // 获取应用的Id
-	GetToken() string   // 对应后台的设置的 Token
-	GetAESKey() []byte  // 32 bytes 的 AES 加密 Key
+	GetCorpId() string // 获取应用所属的企业号Id
+	GetAgentId() int64 // 获取应用的Id
+	GetToken() string  // 对应后台的设置的 Token
+	GetAESKey() []byte // 32 bytes 的 AES 加密 Key
 
 	// 未知类型的消息处理方法
 	//  rawXMLMsg 是解密后的明文 xml 消息体

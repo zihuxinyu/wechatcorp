@@ -14,8 +14,9 @@ package response
 //      <Nonce><![CDATA[nonce]]></Nonce>
 //  </xml>
 type ResponseHttpBody struct {
-	EncryptMsg string `xml:"Encrypt"` // EncryptMsg 为经过加密的密文
-	Signature  string `xml:"MsgSignature"`
-	TimeStamp  int64  `xml:"TimeStamp"`
-	Nonce      string `xml:"Nonce"`
+	XMLName    struct{} `xml:"xml" json:"-"`
+	EncryptMsg string   `xml:"Encrypt"` // EncryptMsg 为经过加密的密文
+	Signature  string   `xml:"MsgSignature"`
+	TimeStamp  int64    `xml:"TimeStamp"`
+	Nonce      string   `xml:"Nonce"`
 }

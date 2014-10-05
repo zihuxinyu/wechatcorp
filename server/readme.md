@@ -63,7 +63,7 @@ func CustomInvalidRequestHandlerFunc(w http.ResponseWriter, r *http.Request, err
 
 func init() {
 	var agent CustomAgent
-	agent.DefaultAgent.Init("CorpId", "AgentId", "Token", []byte("AESKey"))
+	agent.DefaultAgent.Init("CorpId", 1 /*AgentId*/, "Token", []byte("AESKey"))
 
 	// InvalidRequestHandler == nil 则会默认什么都不做
 	agentFrontend := server.NewAgentFrontend(&agent, nil)

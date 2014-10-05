@@ -36,9 +36,11 @@ func decodeNetworkBytesOrder(orderBytes []byte) (n int) {
 }
 
 func encryptMsg(random, rawXMLMsg []byte, CorpId string, AESKey []byte) (encryptMsg []byte) {
-	buf := make([]byte, 20+len(rawXMLMsg)+len(CorpId)+aes.BlockSize)
+	const BLOCK_SIZE = 32
+
+	buf := make([]byte, 20+len(rawXMLMsg)+len(CorpId)+BLOCK_SIZE)
 	plain := buf[:20]
-	pad := buf[len(buf)-aes.BlockSize:]
+	pad := buf[len(buf)-BLOCK_SIZE:]
 
 	// 拼接
 	copy(plain, random)
@@ -46,8 +48,8 @@ func encryptMsg(random, rawXMLMsg []byte, CorpId string, AESKey []byte) (encrypt
 	plain = append(plain, rawXMLMsg...)
 	plain = append(plain, CorpId...)
 
-	// 补位
-	amountToPad := aes.BlockSize - len(plain)%aes.BlockSize
+	// PKCS#7 补位
+	amountToPad := BLOCK_SIZE - len(plain)%BLOCK_SIZE
 	pad = pad[:amountToPad]
 	for i := 0; i < amountToPad; i++ {
 		pad[i] = byte(amountToPad)
@@ -67,12 +69,14 @@ func encryptMsg(random, rawXMLMsg []byte, CorpId string, AESKey []byte) (encrypt
 }
 
 func decryptMsg(encryptMsg []byte, CorpId string, AESKey []byte) (random, rawXMLMsg []byte, err error) {
+	const BLOCK_SIZE = 32
+
 	// 解密
-	if len(encryptMsg) < aes.BlockSize {
+	if len(encryptMsg) < BLOCK_SIZE {
 		err = errors.New("encryptMsg too short")
 		return
 	}
-	if len(encryptMsg)%aes.BlockSize != 0 {
+	if len(encryptMsg)%BLOCK_SIZE != 0 {
 		err = errors.New("encryptMsg is not a multiple of the block size")
 		return
 	}
@@ -86,9 +90,9 @@ func decryptMsg(encryptMsg []byte, CorpId string, AESKey []byte) (random, rawXML
 	plain := make([]byte, len(encryptMsg))
 	mode.CryptBlocks(plain, encryptMsg)
 
-	// 去除补位
+	// PKCS#7 去除补位
 	amountToPad := int(plain[len(plain)-1])
-	if amountToPad < 1 || amountToPad > aes.BlockSize {
+	if amountToPad < 1 || amountToPad > BLOCK_SIZE {
 		err = errors.New("the amount to pad is invalid")
 		return
 	}

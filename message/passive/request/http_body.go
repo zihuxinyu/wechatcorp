@@ -13,7 +13,8 @@ package request
 //      <Encrypt><![CDATA[msg_encrypt]]></Encrypt>
 //  </xml>
 type RequestHttpBody struct {
-	CorpId     string `xml:"ToUserName"`
-	AgentId    string `xml:"AgentID"`
-	EncryptMsg string `xml:"Encrypt"` // EncryptMsg 为经过加密的密文
+	XMLName    struct{} `xml:"xml" json:"-"`
+	CorpId     string   `xml:"ToUserName"`
+	AgentId    int64    `xml:"AgentID"`
+	EncryptMsg string   `xml:"Encrypt"` // EncryptMsg 为经过加密的密文
 }

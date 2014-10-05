@@ -67,15 +67,13 @@ func (this *AgentFrontend) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		wantCorpId := agent.GetCorpId()
-		if subtle.ConstantTimeCompare([]byte(requestHttpBody.CorpId), []byte(wantCorpId)) != 1 {
+		if wantCorpId := agent.GetCorpId(); subtle.ConstantTimeCompare([]byte(requestHttpBody.CorpId), []byte(wantCorpId)) != 1 {
 			err = fmt.Errorf("the message RequestHttpBody's ToUserName mismatch, have: %s, want: %s", requestHttpBody.CorpId, wantCorpId)
 			invalidRequestHandler.ServeInvalidRequest(w, r, err)
 			return
 		}
-		wantAgentId := agent.GetAgentId()
-		if subtle.ConstantTimeCompare([]byte(requestHttpBody.AgentId), []byte(wantAgentId)) != 1 {
-			err = fmt.Errorf("the message RequestHttpBody's AgentId mismatch, have: %s, want: %s", requestHttpBody.AgentId, wantAgentId)
+		if wantAgentId := agent.GetAgentId(); requestHttpBody.AgentId != wantAgentId {
+			err = fmt.Errorf("the message RequestHttpBody's AgentId mismatch, have: %d, want: %d", requestHttpBody.AgentId, wantAgentId)
 			invalidRequestHandler.ServeInvalidRequest(w, r, err)
 			return
 		}

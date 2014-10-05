@@ -14,12 +14,12 @@ var _ Agent = new(DefaultAgent)
 
 type DefaultAgent struct {
 	CorpId  string
-	AgentId string
+	AgentId int64
 	Token   string
 	AESKey  []byte
 }
 
-func (this *DefaultAgent) Init(CorpId, AgentId, Token string, AESKey []byte) {
+func (this *DefaultAgent) Init(CorpId string, AgentId int64, Token string, AESKey []byte) {
 	if len(AESKey) != 32 {
 		panic("the length of AESKey must be equal to 32")
 	}
@@ -33,7 +33,7 @@ func (this *DefaultAgent) Init(CorpId, AgentId, Token string, AESKey []byte) {
 func (this *DefaultAgent) GetCorpId() string {
 	return this.CorpId
 }
-func (this *DefaultAgent) GetAgentId() string {
+func (this *DefaultAgent) GetAgentId() int64 {
 	return this.AgentId
 }
 func (this *DefaultAgent) GetToken() string {
