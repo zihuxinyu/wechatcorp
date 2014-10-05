@@ -5,12 +5,14 @@
 
 package response
 
-// <xml>
-//     <Encrypt><![CDATA[msg_encrypt]]></Encrypt>
-//     <MsgSignature><![CDATA[msg_signature]]></MsgSignature>
-//     <TimeStamp>timestamp</TimeStamp>
-//     <Nonce><![CDATA[nonce]]></Nonce>
-// </xml>
+// 回复微信请求的 http body
+//
+//  <xml>
+//      <Encrypt><![CDATA[msg_encrypt]]></Encrypt>
+//      <MsgSignature><![CDATA[msg_signature]]></MsgSignature>
+//      <TimeStamp>timestamp</TimeStamp>
+//      <Nonce><![CDATA[nonce]]></Nonce>
+//  </xml>
 type ResponseHttpBody struct {
 	EncryptMsg string `xml:"Encrypt"` // EncryptMsg 为经过加密的密文
 	Signature  string `xml:"MsgSignature"`

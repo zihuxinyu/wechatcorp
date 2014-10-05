@@ -3,5 +3,11 @@
 // @license     https://github.com/chanxuehong/wechatcorp/blob/master/LICENSE
 // @authors     chanxuehong(chanxuehong@gmail.com)
 
-// 定义微信服务器推送过来的消息数据结构
-package request
+package common
+
+// 发送消息返回的数据结构
+type Result struct {
+	InvalidUser  string `json:"invaliduser"`
+	InvalidParty string `json:"invalidparty"`
+	InvalidTag   string `json:"invalidtag"`
+}

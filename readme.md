@@ -17,7 +17,7 @@ QQ群：     297489459
 ## 简介
 wechatcorp 包主要分为2个部分，client 和 server
 
-client 主要实现的是“主动”请求功能，如创建自定义菜单，创建部分等等，
+client 主要实现的是“主动”请求功能，如创建自定义菜单，创建部门等等，
 详见 https://github.com/chanxuehong/wechatcorp/blob/master/client/readme.md
 
 server 主要实现的是“被动”接收消息和处理功能，如被动接收文本消息及回复，被动接收语音消息及回复等等，

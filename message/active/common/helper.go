@@ -31,3 +31,25 @@ func JoinInt64(a []int64) string {
 
 	return strings.Join(b, "|")
 }
+
+// 用 '|' 分离 src
+func SplitString(src string) []string {
+	return strings.Split(src, "|")
+}
+
+// 用 '|' 分离 src, 然后将分离后的字符串都转换为整数
+//  NOTE: 要求 src 都是整数合并的, 否则会出错
+func SplitInt64(src string) (dst []int64, err error) {
+	strs := strings.Split(src, "|")
+
+	ret := make([]int64, len(strs))
+	for i, str := range strs {
+		ret[i], err = strconv.ParseInt(str, 10, 64)
+		if err != nil {
+			return
+		}
+	}
+
+	dst = ret
+	return
+}

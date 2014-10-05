@@ -6,6 +6,7 @@
 package request
 
 // 关注事件
+//  如果id为0，则表示是整个企业号的关注/取消关注事件
 type SubscribeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead
@@ -22,6 +23,7 @@ func (req *Request) SubscribeEvent() (event *SubscribeEvent) {
 }
 
 // 取消关注事件
+//  如果id为0，则表示是整个企业号的关注/取消关注事件
 type UnsubscribeEvent struct {
 	XMLName struct{} `xml:"xml" json:"-"`
 	CommonHead

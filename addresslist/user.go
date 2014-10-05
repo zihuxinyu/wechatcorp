@@ -20,17 +20,17 @@ type UserCreateParameters struct {
 
 // 获取成员得到的信息
 type UserInfo struct {
-	Id         string  `json:"userid"`     // 员工UserID
-	Name       string  `json:"name"`       // 成员名称
-	Department []int64 `json:"department"` // 成员所属部门id列表
-	Position   string  `json:"position"`   // 职位信息
-	Mobile     string  `json:"mobile"`     // 手机号码
-	Gender     int     `json:"gender"`     // 性别。gender=0表示男，=1表示女
-	Tel        string  `json:"tel"`        // 办公电话
-	Email      string  `json:"email"`      // 邮箱
-	WeixinId   string  `json:"weixinid"`   // 微信号
-	Avatar     string  `json:"avatar"`     // 头像url。注：如果要获取小图将url最后的"/0"改成"/64"即可
-	Status     int     `json:"status"`     // 关注状态: 1=已关注，2=已冻结，4=未关注
+	Id         string  `json:"userid"`               // 员工UserID
+	Name       string  `json:"name"`                 // 成员名称
+	Department []int64 `json:"department,omitempty"` // 成员所属部门id列表
+	Position   string  `json:"position"`             // 职位信息
+	Mobile     string  `json:"mobile"`               // 手机号码
+	Gender     int     `json:"gender"`               // 性别。gender=0表示男，=1表示女
+	Tel        string  `json:"tel"`                  // 办公电话
+	Email      string  `json:"email"`                // 邮箱
+	WeixinId   string  `json:"weixinid"`             // 微信号
+	Avatar     string  `json:"avatar"`               // 头像url。注：如果要获取小图将url最后的"/0"改成"/64"即可
+	Status     int     `json:"status"`               // 关注状态: 1=已关注，2=已冻结，4=未关注
 }
 
 type UserInfoBase struct {

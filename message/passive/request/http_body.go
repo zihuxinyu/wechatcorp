@@ -5,11 +5,13 @@
 
 package request
 
-// <xml>
-//     <ToUserName><![CDATA[toUser]]></ToUserName>
-//     <AgentID><![CDATA[toAgentID]]></AgentID>
-//     <Encrypt><![CDATA[msg_encrypt]]></Encrypt>
-// </xml>
+// 微信服务器请求 http body
+//
+//  <xml>
+//      <ToUserName><![CDATA[toUser]]></ToUserName>
+//      <AgentID><![CDATA[toAgentID]]></AgentID>
+//      <Encrypt><![CDATA[msg_encrypt]]></Encrypt>
+//  </xml>
 type RequestHttpBody struct {
 	CorpId     string `xml:"ToUserName"`
 	AgentId    string `xml:"AgentID"`

@@ -128,13 +128,6 @@ type NewsArticle struct {
 	URL         string `xml:"Url,omitempty"         json:"Url,omitempty"`         // 点击图文消息跳转链接
 }
 
-func (this *NewsArticle) Init(title, description, URL, picURL string) {
-	this.Title = title
-	this.Description = description
-	this.URL = URL
-	this.PicURL = picURL
-}
-
 // 图文消息.
 //  NOTE: Articles 赋值的同时也要更改 ArticleCount 字段, 建议用 NewNews() 和 News.AppendArticle()
 type News struct {
