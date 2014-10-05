@@ -155,6 +155,12 @@ func (this *MultiAgentFrontend) ServeHTTP(w http.ResponseWriter, r *http.Request
 			return
 		}
 
+		if requestHttpBody.CorpId != msgReq.ToUserName {
+			err = fmt.Errorf("the RequestHttpBody's ToUserName(==%d) mismatch the Request's ToUserName(==%d)", requestHttpBody.CorpId, msgReq.ToUserName)
+			invalidRequestHandler.ServeInvalidRequest(w, r, err)
+			return
+		}
+
 		if requestHttpBody.AgentId != msgReq.AgentId {
 			err = fmt.Errorf("the RequestHttpBody's AgentId(==%d) mismatch the Request's AgengId(==%d)", requestHttpBody.AgentId, msgReq.AgentId)
 			invalidRequestHandler.ServeInvalidRequest(w, r, err)
