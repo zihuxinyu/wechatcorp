@@ -21,37 +21,10 @@ func _DepartmentUpdateURL(accesstoken string) string {
 		accesstoken
 }
 
-// https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token=ACCESS_TOKEN&id=1&id=2
-func _DepartmentDeleteURL(accesstoken string, id []int64) string {
-	const prefixStr = "https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token="
-	const prefixStrLen = len(prefixStr)
-
-	if len(id) == 0 {
-		return prefixStr + accesstoken
-	}
-	if len(id) == 1 {
-		return prefixStr + accesstoken + "&id=" + strconv.FormatInt(id[0], 10)
-	}
-
-	idx := make([]string, len(id))
-	for i, n := range id {
-		idx[i] = strconv.FormatInt(n, 10)
-	}
-
-	n := prefixStrLen + len(accesstoken)
-	for _, str := range idx {
-		n += 4 + len(str) // &id=
-	}
-	buf := make([]byte, 0, n)
-
-	buf = append(buf, prefixStr...)
-	buf = append(buf, accesstoken...)
-	for _, str := range idx {
-		buf = append(buf, "&id="...)
-		buf = append(buf, str...)
-	}
-
-	return string(buf)
+// https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token=ACCESS_TOKEN&id=2
+func _DepartmentDeleteURL(accesstoken string, id int64) string {
+	return "https://qyapi.weixin.qq.com/cgi-bin/department/delete?access_token=" +
+		accesstoken + "&id=" + strconv.FormatInt(id, 10)
 }
 
 // https://qyapi.weixin.qq.com/cgi-bin/department/list?access_token=ACCESS_TOKEN

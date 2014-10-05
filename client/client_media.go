@@ -34,7 +34,7 @@ func (c *Client) MediaUploadVideo(filepath_ string) (info *media.MediaInfo, err 
 	return c.mediaUpload(media.MEDIA_TYPE_VIDEO, filepath_)
 }
 
-// 上传多媒体缩略图
+// 上传多媒体缩略图（目前文档还没有）
 func (c *Client) MediaUploadThumb(filepath_ string) (info *media.MediaInfo, err error) {
 	return c.mediaUpload(media.MEDIA_TYPE_THUMB, filepath_)
 }
@@ -97,7 +97,7 @@ func (c *Client) MediaUploadVideoFromReader(filename string, mediaReader io.Read
 	return c.mediaUploadFromReader(media.MEDIA_TYPE_VIDEO, filename, mediaReader)
 }
 
-// 上传多媒体缩略图
+// 上传多媒体缩略图（目前文档还没有）
 //  NOTE: 参数 filename 不是文件路径, 是指定 multipart form 里面文件名称
 func (c *Client) MediaUploadThumbFromReader(filename string, mediaReader io.Reader) (info *media.MediaInfo, err error) {
 	if filename == "" {

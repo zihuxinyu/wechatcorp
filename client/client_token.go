@@ -11,11 +11,13 @@ import (
 	"net/http"
 )
 
-// 获取缓存中的 access token, err == nil 时 token 才有效!
+// 获取缓存中的 access token, 如果缓存中没有则从微信服务器获取 access token 并存入缓存,
+// err == nil 时 token 才有效!
 func (c *Client) Token() (token string, err error) {
 	if token, err = c.tokenCache.Token(); err != ErrCacheMiss {
 		return
 	}
+	// cache miss, 从微信服务器中获取
 	return c.TokenRefresh()
 }
 

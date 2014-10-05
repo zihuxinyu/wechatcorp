@@ -11,13 +11,10 @@ import (
 )
 
 // 创建部门
-func (c *Client) DepartmentCreate(name string, parentid int64) (id int64, err error) {
-	var request = struct {
-		Name     string `json:"name"`
-		ParentId int64  `json:"parentid"`
-	}{
-		Name:     name,
-		ParentId: parentid,
+func (c *Client) DepartmentCreate(para *addresslist.DepartmentCreateParameters) (id int64, err error) {
+	if para == nil {
+		err = errors.New("para == nil")
+		return
 	}
 
 	var result struct {
@@ -32,7 +29,7 @@ func (c *Client) DepartmentCreate(name string, parentid int64) (id int64, err er
 
 	hasRetry := false
 RETRY:
-	if err = c.postJSON(_DepartmentCreateURL(token), &request, &result); err != nil {
+	if err = c.postJSON(_DepartmentCreateURL(token), para, &result); err != nil {
 		return
 	}
 
@@ -59,13 +56,9 @@ RETRY:
 }
 
 // 更新部门
-func (c *Client) DepartmentUpdate(id int64, name string) (err error) {
-	var request = struct {
-		Id   int64  `json:"id"`
-		Name string `json:"name"`
-	}{
-		Id:   id,
-		Name: name,
+func (c *Client) DepartmentUpdate(para addresslist.DepartmentUpdateParameters) (err error) {
+	if para == nil {
+		return errors.New("para == nil")
 	}
 
 	var result Error
@@ -77,7 +70,7 @@ func (c *Client) DepartmentUpdate(id int64, name string) (err error) {
 
 	hasRetry := false
 RETRY:
-	if err = c.postJSON(_DepartmentUpdateURL(token), &request, &result); err != nil {
+	if err = c.postJSON(_DepartmentUpdateURL(token), para, &result); err != nil {
 		return
 	}
 
@@ -103,11 +96,7 @@ RETRY:
 }
 
 // 删除部门
-func (c *Client) DepartmentDelete(id []int64) (err error) {
-	if len(id) == 0 {
-		return errors.New("id is empty")
-	}
-
+func (c *Client) DepartmentDelete(id int64) (err error) {
 	var result Error
 
 	token, err := c.Token()
